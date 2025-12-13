@@ -1,0 +1,210 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.main {
+    width: 100%;
+    height: auto;
+}
+
+.header {
+    width: 100%;
+    min-height: 60px;
+}
+
+@media (min-width: 769px) {
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .main {
+        max-width: 480px;
+        width: 100%;
+        height: auto;
+    }
+
+    .header {
+        display: flex;
+        background-color: #5b7194;
+    }
+
+    .menu-hamburguer img {
+        margin-top: 30px;
+        margin-left: 45px;
+        height: 35px;
+        width: 30px;
+        filter:
+            invert(1) grayscale(1) contrast(100);
+    }
+
+    .temperaturas {
+        background-image: linear-gradient(to top, #ffad15, #5b7194);
+    }
+
+    .nome-local {
+        display: flex;
+        color: white;
+        margin-top: 33px;
+        margin-left: 16px;
+    }
+
+    .nome-local img {
+        margin-top: 3px;
+        height: 25px;
+        width: 25px;
+        filter:
+            invert(1) grayscale(1) contrast(100);
+    }
+
+    .temperatura-icone {
+        display: flex;
+    }
+
+    .temperatura-icone img {
+        margin-left: 140px;
+        margin-top: 20px;
+        height: 180px;
+        width: 180px;
+    }
+
+    .temperatura-atual {
+        color: white;
+        font-size: 4.6rem;
+        font-weight: 100;
+        margin-top: 60px;
+        margin-left: 30px;
+    }
+
+    .descricao-do-dia {
+        color: white;
+        margin-left: 30px;
+        margin-top: -45px;
+    }
+
+    .variacao-temperatura {
+        color: white;
+        margin-left: 30px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .bloco-temperaturas-horas {
+        background: linear-gradient(180deg,
+                #ffad1527 0%,
+                #ffad1548 40%,
+                #ffad1577 70%,
+                #ffad15c2 100%);
+        padding: 24px;
+        border-radius: 12px;
+        color: white;
+        max-width: 500px;
+        width: calc(100% - 20px);
+        margin: 0 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    .bloco-temperaturas-horas .descricao {
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 24px;
+        line-height: 1.4;
+        opacity: 0.95;
+    }
+
+    .bloco-temperaturas-horas .horarios {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .bloco-temperaturas-horas .hora-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+    }
+
+    .bloco-temperaturas-horas .hora {
+        font-size: 12px;
+        opacity: 0.8;
+        font-weight: 400;
+    }
+
+    .bloco-temperaturas-horas .icone {
+        font-size: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bloco-temperaturas-horas .temperatura {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .bloco-temperaturas-horas .barra-container {
+        position: relative;
+        margin: 20px 0 16px 0;
+    }
+
+    .bloco-temperaturas-horas .barra-fundo {
+        height: 2px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        position: relative;
+    }
+
+    .bloco-temperaturas-horas .pontos {
+        position: absolute;
+        top: -4px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 2%;
+    }
+
+    .bloco-temperaturas-horas .ponto {
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .bloco-temperaturas-horas .probabilidades {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .bloco-temperaturas-horas .prob-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex: 1;
+        justify-content: center;
+        font-size: 13px;
+        opacity: 0.8;
+    }
+
+    .bloco-temperaturas-horas .prob-item::before {
+        content: '💧';
+        font-size: 14px;
+    }
+
+
+}
