@@ -47,7 +47,7 @@ body {
     }
 
     .temperaturas {
-        background-image: linear-gradient(to top, #ffad15, #5b7194);
+        background-image: linear-gradient(to top, #9c723b, #5b7194);
     }
 
     .nome-local {
@@ -97,12 +97,13 @@ body {
         margin-bottom: 50px;
     }
 
+    /* Primeiro Bloco */
     .bloco-temperaturas-horas {
         background: linear-gradient(180deg,
-                #ffad1527 0%,
-                #ffad1548 40%,
-                #ffad1577 70%,
-                #ffad15c2 100%);
+                #1a233a 0%,
+                #283044 40%,
+                #383d47 70%,
+                #626670 100%);
         padding: 24px;
         border-radius: 12px;
         color: white;
@@ -204,6 +205,73 @@ body {
     .bloco-temperaturas-horas .prob-item::before {
         content: '💧';
         font-size: 14px;
+    }
+
+
+    /* Segundo Bloco */
+
+    .dias-da-semana {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+        color: white;
+    }
+
+    .dias-da-semana>div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .prob-chuva {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .prob-chuva h3 {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #fdfdfd;
+    }
+
+    .nome-do-dia-semana h3 {
+        width: 50px;
+        font-size: 16px;
+        font-weight: 500;
+        text-align: left;
+    }
+
+    .clima-dia,
+    .clima-noite {
+        display: flex;
+        justify-content: center;
+        width: 40px;
+    }
+
+    .clima-dia img,
+    .clima-noite img {
+        width: 45px;
+    }
+
+    .temperatura-dia,
+    .temperatura-noite {
+        width: 40px;
+        text-align: right;
+    }
+
+    .temperatura-dia h3 {
+        font-size: 18px;
+    }
+
+    .temperatura-noite h3 {
+        font-size: 16px;
+        color: #fdfdfd;
     }
 
 
