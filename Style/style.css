@@ -47,7 +47,7 @@ body {
     }
 
     .temperaturas {
-        background-image: linear-gradient(to top, #9c723b, #5b7194);
+        background-image: linear-gradient(to top, #535f72, #5b7194);
     }
 
     .nome-local {
@@ -237,7 +237,7 @@ body {
         gap: 4px;
         font-size: 14px;
         font-weight: 400;
-        color: #fdfdfd;
+        color: #fdfdfdbe;
     }
 
     .nome-do-dia-semana h3 {
@@ -270,9 +270,16 @@ body {
     }
 
     .temperatura-noite h3 {
-        font-size: 16px;
-        color: #fdfdfd;
+        font-size: 17px;
+        color: #fdfdfdbe;
     }
+
+    .rodape {
+        width: 20px;
+        height: 50px;
+        background-color: #535f72;
+    }
+
 
 
 }
