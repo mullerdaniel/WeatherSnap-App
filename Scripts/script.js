@@ -1,9 +1,87 @@
-// Coordenadas padrão (Schroeder)
 let coordenadasAtuais = {
     latitude: -26.4125,
     longitude: -49.0731,
     cidade: 'Schroeder'
 };
+
+function obterIcone(codigoClima, isDia, probChuva) {
+
+    if (codigoClima >= 95) {
+        return '/Icones-clima/trovao.svg';
+    }
+    
+    if (codigoClima >= 71 && codigoClima <= 86) {
+        if (codigoClima >= 85) return '/Icones-clima/nevada-6.svg';
+        if (codigoClima >= 75) return '/Icones-clima/chuvoso-4.svg';
+        if (codigoClima >= 73) return '/Icones-clima/nevada-4.svg';
+        if (codigoClima >= 71) return '/Icones-clima/nevada-3.svg';
+        return '/Icones-clima/nevada-2.svg';
+    }
+    
+    if (codigoClima >= 51 && codigoClima <= 82) {
+        if (codigoClima >= 82) return '/Icones-clima/chuvoso-7.svg';
+        if (codigoClima >= 80) return '/Icones-clima/chuvoso-6.svg';
+        if (codigoClima >= 65) return '/Icones-clima/chuvoso-5.svg';
+        if (codigoClima >= 63) return '/Icones-clima/chuvoso-4.svg';
+        if (codigoClima >= 61) return '/Icones-clima/chuvoso-3.svg';
+        if (codigoClima >= 55) return '/Icones-clima/chuvoso-2.svg';
+        return '/Icones-clima/chuvoso-1.svg';
+    }
+    
+    if (codigoClima >= 2 && codigoClima <= 3) {
+        if (isDia) {
+            if (codigoClima === 3) return '/Icones-clima/dia-nublado-3.svg';
+            return '/Icones-clima/dia-nublado-2.svg';
+        } else {
+            if (codigoClima === 3) return '/Icones-clima/noite-nublada-3.svg';
+            return '/Icones-clima/noite-nublada-2.svg';
+        }
+    }
+    
+    if (codigoClima === 1) {
+        return isDia ? '/Icones-clima/dia-nublado-1.svg' : '/Icones-clima/noite-nublada-1.svg';
+    }
+    
+    if (codigoClima >= 45) {
+        return '/Icones-clima/nublada.svg';
+    }
+    
+    return isDia ? '/Icones-clima/dia.svg' : '/Icones-clima/noite.svg';
+}
+
+function obterEmoji(codigoClima, probChuva) {
+    if (codigoClima >= 95) return '⛈️';
+    if (codigoClima >= 71 && codigoClima <= 86) return '❄️';
+    if (codigoClima >= 51 && codigoClima <= 82) return '🌧️';
+    if (codigoClima >= 1 && codigoClima <= 3) return '☁️';
+    return '☀️';
+}
+
+// Função para obter a cor de fundo baseada no clima e hora
+function obterCorFundo(codigoClima, isDia, probChuva) {
+    // Trovoada
+    if (codigoClima >= 95) {
+        return isDia ? 'rgb(60, 70, 85)' : 'rgb(30, 35, 45)';
+    }
+    
+    // Neve
+    if (codigoClima >= 71 && codigoClima <= 86) {
+        return isDia ? 'rgb(200, 210, 220)' : 'rgb(80, 90, 110)';
+    }
+    
+    // Chuva
+    if (codigoClima >= 51 && codigoClima <= 82) {
+        return isDia ? 'rgb(70, 85, 100)' : 'rgb(40, 50, 65)';
+    }
+    
+    // Nublado
+    if (codigoClima >= 1 && codigoClima <= 3) {
+        return isDia ? 'rgb(90, 110, 130)' : 'rgb(50, 65, 80)';
+    }
+    
+    // Céu limpo
+    return isDia ? 'rgb(91, 117, 150)' : 'rgb(46, 73, 85)';
+}
 
 // Função para buscar cidades usando a API Nominatim (OpenStreetMap)
 async function buscarCidades(query) {
@@ -102,52 +180,101 @@ function selecionarCidade(lat, lon, nome) {
 }
 
 async function atualizarClima() {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${coordenadasAtuais.latitude}&longitude=${coordenadasAtuais.longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${coordenadasAtuais.latitude}&longitude=${coordenadasAtuais.longitude}&current=temperature_2m,weather_code&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
         
+        const tempAtual = Math.round(data.current.temperature_2m);
+        const codigoClimaAtual = data.current.weather_code;
         const tempMax = Math.round(data.daily.temperature_2m_max[0]);
         const tempMin = Math.round(data.daily.temperature_2m_min[0]);
-        const tempAtual = Math.round((tempMax + tempMin) / 2); 
         const probChuva = data.daily.precipitation_probability_max[0];
         
+        // Determinar se é dia ou noite
+        const horaAtual = new Date().getHours();
+        const isDia = horaAtual >= 6 && horaAtual < 18;
+        
+        // Atualizar cor de fundo
+        const corFundo = obterCorFundo(codigoClimaAtual, isDia, probChuva);
+        document.body.style.backgroundColor = corFundo;
+        const tempSection = document.querySelector('.temperaturas');
+        if (tempSection) {
+            tempSection.style.backgroundColor = corFundo;
+        }
+        
+        // Atualizar temperatura atual
         document.querySelector('.temperatura-atual').textContent = tempAtual + '°';
         
+        // Atualizar ícone principal
+        const iconePrincipal = obterIcone(codigoClimaAtual, isDia, probChuva);
+        document.querySelector('.temperatura-icone img').src = iconePrincipal;
+        
+        // Atualizar variação de temperatura
         document.querySelector('.variacao-temperatura h3').textContent = tempMin + '° / ' + tempMax + '°';
         
-        const descricao = probChuva > 50 ? 'Nublado' : 'Limpo';
+        // Atualizar descrição
+        const descricoes = {
+            0: 'Céu Limpo',
+            1: 'Parcialmente Nublado',
+            2: 'Parcialmente Nublado',
+            3: 'Nublado',
+            45: 'Nevoeiro',
+            48: 'Nevoeiro',
+            51: 'Garoa Leve',
+            53: 'Garoa Moderada',
+            55: 'Garoa Forte',
+            61: 'Chuva Leve',
+            63: 'Chuva Moderada',
+            65: 'Chuva Forte',
+            71: 'Neve Leve',
+            73: 'Neve Moderada',
+            75: 'Neve Forte',
+            80: 'Pancadas de Chuva',
+            81: 'Pancadas de Chuva',
+            82: 'Pancadas de Chuva Forte',
+            85: 'Pancadas de Neve',
+            86: 'Pancadas de Neve',
+            95: 'Trovoada',
+            96: 'Trovoada com Granizo',
+            99: 'Trovoada Forte'
+        };
+        
+        const descricao = descricoes[codigoClimaAtual] || 'Clima Variado';
         document.querySelector('.descricao-do-dia h3').textContent = descricao;
         
         document.querySelector('.descricao').textContent = 
-            `Clima ${descricao}. Máximas na casa dos ${tempMax}°C e mínimas em torno de ${tempMin}°C.`;
+            `${descricao}. Máximas na casa dos ${tempMax}°C e mínimas em torno de ${tempMin}°C.`;
         
-        const horaAtual = new Date().getHours();
+        // Atualizar previsão horária
         const horasItems = document.querySelectorAll('.hora-item');
         
         horasItems.forEach((item, index) => {
             const horaElemento = item.querySelector('.hora');
+            const iconeElemento = item.querySelector('.icone');
             const tempElemento = item.querySelector('.temperatura');
             
             const hora = (horaAtual + index) % 24;
             horaElemento.textContent = hora + 'h';
             
-            let tempHora;
-            if (hora >= 6 && hora <= 14) {
-                tempHora = Math.round(tempMin + (tempMax - tempMin) * ((hora - 6) / 8));
-            } else if (hora > 14 && hora <= 18) {
-                tempHora = Math.round(tempMax - (tempMax - tempMin) * ((hora - 14) / 4));
-            } else {
-                tempHora = tempMin;
-            }
-            
+            // Temperatura horária da API
+            const tempHora = Math.round(data.hourly.temperature_2m[index]);
             tempElemento.textContent = tempHora + '°';
+            
+            // Ícone horário
+            const isDiaHora = hora >= 6 && hora < 18;
+            const codigoHora = data.hourly.weather_code[index];
+            const probChuvaHora = data.hourly.precipitation_probability[index];
+            const emojiHora = obterEmoji(codigoHora, probChuvaHora);
+            iconeElemento.textContent = emojiHora;
         });
         
+        // Atualizar probabilidades de chuva
         const probabilidades = document.querySelectorAll('.prob-item');
-        probabilidades.forEach((prob) => {
-            prob.textContent = probChuva + '%';
+        probabilidades.forEach((prob, index) => {
+            const probHora = data.hourly.precipitation_probability[index] || 0;
+            prob.textContent = probHora + '%';
         });
 
         // Atualizar previsão semanal
@@ -169,6 +296,16 @@ async function atualizarClima() {
                 
                 diaBloco.querySelector('.temperatura-dia h3').innerText = `${max}°`;
                 diaBloco.querySelector('.temperatura-noite h3').innerText = `${min}°`;
+                
+                // Atualizar ícones do dia e noite
+                const codigoDia = data.daily.weather_code[index];
+                const probDia = data.daily.precipitation_probability_max[index];
+                
+                const iconeDia = obterIcone(codigoDia, true, probDia);
+                const iconeNoite = obterIcone(codigoDia, false, probDia);
+                
+                diaBloco.querySelector('.clima-dia img').src = iconeDia;
+                diaBloco.querySelector('.clima-noite img').src = iconeNoite;
             }
         });
 
