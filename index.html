@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/Imagens/icone-aba.webp">
-    <script src="/script.js"></script>
+    <script src="/Scripts/script.js"></script>
     <link rel="stylesheet" href="/Style/style.css">
     <title>Clima Atual</title>
 </head>
@@ -13,12 +13,22 @@
 <body>
     <main class="main">
         <header class="header">
-            <div class="menu-hamburguer">
-                <img src="/Imagens/menu-hamburguer.png" alt="Menu Hamburguer">
+            <div class="header-top">
+                <div class="menu-hamburguer">
+                    <img src="/Imagens/menu-hamburguer.png" alt="Menu Hamburguer">
+                </div>
+                <div class="nome-local">
+                    <h2 id="cidade-nome">Schroeder</h2>
+                    <img src="/Imagens/icone-local.png" alt="Icone Local">
+                </div>
+                <div class="notificacao">
+                    <img src="/Imagens/sino.png" alt="Notificações">
+                </div>
             </div>
-            <div class="nome-local">
-                <h2>Schroeder</h2>
-                <img src="/Imagens/icone-local.png" alt="Icone Local">
+            
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search city..." class="search-input">
+                <div id="search-results" class="search-results"></div>
             </div>
         </header>
 
@@ -47,43 +57,43 @@
                 <div class="horarios">
                     <div class="hora-item">
                         <div class="hora">-h</div>
-                        <div class="icone">🌙</div>
+                        <div class="icone">☁️</div>
                         <div class="temperatura">-°</div>
                     </div>
 
                     <div class="hora-item">
                         <div class="hora">-h</div>
-                        <div class="icone">🌤️</div>
+                        <div class="icone">☁️</div>
                         <div class="temperatura">-°</div>
                     </div>
 
                     <div class="hora-item">
                         <div class="hora">-h</div>
-                        <div class="icone">☀️</div>
+                        <div class="icone">☁️</div>
                         <div class="temperatura">-°</div>
                     </div>
 
                     <div class="hora-item">
                         <div class="hora">-h</div>
-                        <div class="icone">🌤️</div>
+                        <div class="icone">☁️</div>
                         <div class="temperatura">-°</div>
                     </div>
 
                     <div class="hora-item">
                         <div class="hora">-h</div>
-                        <div class="icone">🌫️</div>
+                        <div class="icone">☁️</div>
                         <div class="temperatura">-°</div>
                     </div>
 
                     <div class="hora-item">
                         <div class="hora">-h</div>
-                        <div class="icone">🌫️</div>
+                        <div class="icone">☁️</div>
                         <div class="temperatura">-°</div>
                     </div>
 
                     <div class="hora-item">
                         <div class="hora">-h</div>
-                        <div class="icone">🌫️</div>
+                        <div class="icone">☁️</div>
                         <div class="temperatura">-°</div>
                     </div>
                 </div>
