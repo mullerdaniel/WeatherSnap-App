@@ -57,33 +57,80 @@ function obterEmoji(codigoClima, probChuva) {
     return '☀️';
 }
 
-// Função para obter a cor de fundo baseada no clima e hora
-function obterCorFundo(codigoClima, isDia, probChuva) {
+function obterSugestao(codigoClima, temperatura, probChuva) {
     // Trovoada
     if (codigoClima >= 95) {
-        return isDia ? 'rgb(60, 70, 85)' : 'rgb(30, 35, 45)';
+        return 'Evite sair de casa! Há risco de trovoadas.';
     }
     
     // Neve
     if (codigoClima >= 71 && codigoClima <= 86) {
+        return 'Vista-se bem! Está nevando.';
+    }
+    
+    // Chuva forte
+    if (codigoClima >= 65 || probChuva >= 70) {
+        return 'Leve um guarda-chuva! Grande chance de chuva.';
+    }
+    
+    // Chuva leve/moderada
+    if (codigoClima >= 51 && codigoClima <= 63) {
+        return 'Não esqueça o guarda-chuva!';
+    }
+    
+    // Nublado com chance de chuva
+    if (probChuva >= 40 && probChuva < 70) {
+        return 'Leve um guarda-chuva por precaução.';
+    }
+    
+    // Temperatura muito baixa
+    if (temperatura <= 10) {
+        return 'Vista um casaco! Está frio.';
+    }
+    
+    // Temperatura muito alta
+    if (temperatura >= 30) {
+        return 'Use protetor solar e beba muita água!';
+    }
+    
+    // Tempo agradável
+    if (temperatura >= 18 && temperatura <= 25 && codigoClima <= 1) {
+        return 'Ideal para uma caminhada!';
+    }
+    
+    // Nublado
+    if (codigoClima >= 2 && codigoClima <= 3) {
+        return 'Tempo ótimo para assistir um filme em casa.';
+    }
+    
+    // Céu limpo
+    if (codigoClima === 0 || codigoClima === 1) {
+        return 'Aproveite o dia! O tempo está ótimo.';
+    }
+    
+    return 'Tenha um ótimo dia!';
+}
+
+function obterCorFundo(codigoClima, isDia, probChuva) {
+    if (codigoClima >= 95) {
+        return isDia ? 'rgb(60, 70, 85)' : 'rgb(30, 35, 45)';
+    }
+    
+    if (codigoClima >= 71 && codigoClima <= 86) {
         return isDia ? 'rgb(200, 210, 220)' : 'rgb(80, 90, 110)';
     }
     
-    // Chuva
     if (codigoClima >= 51 && codigoClima <= 82) {
         return isDia ? 'rgb(70, 85, 100)' : 'rgb(40, 50, 65)';
     }
     
-    // Nublado
     if (codigoClima >= 1 && codigoClima <= 3) {
         return isDia ? 'rgb(90, 110, 130)' : 'rgb(50, 65, 80)';
     }
     
-    // Céu limpo
     return isDia ? 'rgb(91, 117, 150)' : 'rgb(46, 73, 85)';
 }
 
-// Função para buscar cidades usando a API Nominatim (OpenStreetMap)
 async function buscarCidades(query) {
     if (query.length < 2) return [];
     
@@ -99,7 +146,6 @@ async function buscarCidades(query) {
     }
 }
 
-// Configurar a barra de pesquisa
 function configurarPesquisa() {
     const searchInput = document.getElementById('search-input');
     const searchResults = document.getElementById('search-results');
@@ -121,7 +167,6 @@ function configurarPesquisa() {
         }, 300);
     });
 
-    // Fechar resultados ao clicar fora
     document.addEventListener('click', (e) => {
         if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
             searchResults.classList.remove('active');
@@ -129,7 +174,6 @@ function configurarPesquisa() {
     });
 }
 
-// Mostrar resultados da pesquisa
 function mostrarResultados(cidades) {
     const searchResults = document.getElementById('search-results');
     
@@ -151,7 +195,6 @@ function mostrarResultados(cidades) {
         `;
     }).join('');
 
-    // Adicionar event listeners aos resultados
     searchResults.querySelectorAll('.search-result-item').forEach(item => {
         item.addEventListener('click', () => {
             const lat = parseFloat(item.dataset.lat);
@@ -167,7 +210,6 @@ function mostrarResultados(cidades) {
     searchResults.classList.add('active');
 }
 
-// Selecionar cidade e atualizar o clima
 function selecionarCidade(lat, lon, nome) {
     coordenadasAtuais = {
         latitude: lat,
@@ -192,11 +234,9 @@ async function atualizarClima() {
         const tempMin = Math.round(data.daily.temperature_2m_min[0]);
         const probChuva = data.daily.precipitation_probability_max[0];
         
-        // Determinar se é dia ou noite
         const horaAtual = new Date().getHours();
         const isDia = horaAtual >= 6 && horaAtual < 18;
         
-        // Atualizar cor de fundo
         const corFundo = obterCorFundo(codigoClimaAtual, isDia, probChuva);
         document.body.style.backgroundColor = corFundo;
         const tempSection = document.querySelector('.temperaturas');
@@ -204,17 +244,13 @@ async function atualizarClima() {
             tempSection.style.backgroundColor = corFundo;
         }
         
-        // Atualizar temperatura atual
         document.querySelector('.temperatura-atual').textContent = tempAtual + '°';
         
-        // Atualizar ícone principal
         const iconePrincipal = obterIcone(codigoClimaAtual, isDia, probChuva);
         document.querySelector('.temperatura-icone img').src = iconePrincipal;
         
-        // Atualizar variação de temperatura
         document.querySelector('.variacao-temperatura h3').textContent = tempMin + '° / ' + tempMax + '°';
         
-        // Atualizar descrição
         const descricoes = {
             0: 'Céu Limpo',
             1: 'Parcialmente Nublado',
@@ -244,10 +280,11 @@ async function atualizarClima() {
         const descricao = descricoes[codigoClimaAtual] || 'Clima Variado';
         document.querySelector('.descricao-do-dia h3').textContent = descricao;
         
-        document.querySelector('.descricao').textContent = 
-            `${descricao}. Máximas na casa dos ${tempMax}°C e mínimas em torno de ${tempMin}°C.`;
+        const sugestao = obterSugestao(codigoClimaAtual, tempAtual, probChuva);
         
-        // Atualizar previsão horária
+        document.querySelector('.descricao').textContent = 
+            `${descricao}. Máximas na casa dos ${tempMax}°C e mínimas em torno de ${tempMin}°C. ${sugestao}`;
+        
         const horasItems = document.querySelectorAll('.hora-item');
         
         horasItems.forEach((item, index) => {
@@ -258,11 +295,9 @@ async function atualizarClima() {
             const hora = (horaAtual + index) % 24;
             horaElemento.textContent = hora + 'h';
             
-            // Temperatura horária da API
             const tempHora = Math.round(data.hourly.temperature_2m[index]);
             tempElemento.textContent = tempHora + '°';
             
-            // Ícone horário
             const isDiaHora = hora >= 6 && hora < 18;
             const codigoHora = data.hourly.weather_code[index];
             const probChuvaHora = data.hourly.precipitation_probability[index];
@@ -270,14 +305,12 @@ async function atualizarClima() {
             iconeElemento.textContent = emojiHora;
         });
         
-        // Atualizar probabilidades de chuva
         const probabilidades = document.querySelectorAll('.prob-item');
         probabilidades.forEach((prob, index) => {
             const probHora = data.hourly.precipitation_probability[index] || 0;
             prob.textContent = probHora + '%';
         });
 
-        // Atualizar previsão semanal
         const diasConteiner = document.querySelectorAll('.dias-da-semana > div');
 
         data.daily.time.forEach((dataISO, index) => {
@@ -314,7 +347,6 @@ async function atualizarClima() {
     }
 }
 
-// Inicializar quando a página carregar
 window.addEventListener('DOMContentLoaded', () => {
     configurarPesquisa();
     atualizarClima();
